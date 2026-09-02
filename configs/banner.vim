@@ -12,6 +12,12 @@ function! s:ShowBanner() abort
         \ '   ██║   ██║ ╚═╝ ██║╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝',
         \ '   ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ ',
         \ ]
+  " Keep a separate banner for narrow splits.  WinResized redraws the
+  " startup buffer after :NERDTreeToggle changes the layout, so this must
+  " exist before the first resize event.
+  let s:compact_banner = [
+        \ 'TMCUONG',
+        \ ]
 
 
   enew
