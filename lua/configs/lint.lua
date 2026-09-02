@@ -25,21 +25,55 @@ lint.linters_by_ft = {
   sql = { "sqlfluff" },
 }
 
-local group = vim.api.nvim_create_augroup("NvimLint", {
-  clear = true,
+local group = vim.api.nvim_create_augroup("NvimLint", { clear = true })
+local timers = {}
+
+local function lint_buffer(bufnr)
+  if not vim.api.nvim_buf_is_valid(bufnr) or not vim.api.nvim_buf_is_loaded(bufnr) then
+    return
+  end
+
+  -- nvim-lint operates on the current buffer. Restore the buffer context here
+  -- because the user may switch buffers while the debounce timer is pending.
+  vim.api.nvim_buf_call(bufnr, function()
+    lint.try_lint(nil, { ignore_errors = true })
+  end)
+end
+
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufWritePost", "InsertLeave" }, {
+  group = group,
+  callback = function(event)
+    local bufnr = event.buf
+    if timers[bufnr] then
+      timers[bufnr]:stop()
+    else
+      timers[bufnr] = vim.uv.new_timer()
+    end
+
+    timers[bufnr]:start(
+      200,
+      0,
+      vim.schedule_wrap(function()
+        lint_buffer(bufnr)
+      end)
+    )
+  end,
 })
 
-vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+vim.api.nvim_create_autocmd("BufWipeout", {
   group = group,
-  callback = function()
-    -- nvim-lint silently skips linters that are not installed. This keeps
-    -- the same config usable before and after Mason has installed tools.
-    lint.try_lint(nil, { ignore_errors = true })
+  callback = function(event)
+    local timer = timers[event.buf]
+    if timer then
+      timer:stop()
+      timer:close()
+      timers[event.buf] = nil
+    end
   end,
 })
 
 vim.keymap.set("n", "<leader>li", function()
-  lint.try_lint(nil, { ignore_errors = true })
+  lint_buffer(vim.api.nvim_get_current_buf())
 end, {
   desc = "Trigger linting",
 })

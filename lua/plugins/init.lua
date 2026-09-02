@@ -1,11 +1,11 @@
 -- Author:
---    
---     ████████╗███╗   ███╗ ██████╗██╗   ██╗ ██████╗ ███╗   ██╗ ██████╗ 
---     ╚══██╔══╝████╗ ████║██╔════╝██║   ██║██╔═══██╗████╗  ██║██╔════╝ 
+--
+--     ████████╗███╗   ███╗ ██████╗██╗   ██╗ ██████╗ ███╗   ██╗ ██████╗
+--     ╚══██╔══╝████╗ ████║██╔════╝██║   ██║██╔═══██╗████╗  ██║██╔════╝
 --        ██║   ██╔████╔██║██║     ██║   ██║██║   ██║██╔██╗ ██║██║  ███╗
 --        ██║   ██║╚██╔╝██║██║     ██║   ██║██║   ██║██║╚██╗██║██║   ██║
 --        ██║   ██║ ╚═╝ ██║╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝
---        ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ 
+--        ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝
 --
 --
 -- github.com/tmcuong-tech
@@ -50,7 +50,6 @@ return {
         "yaml-language-server",
         "dockerfile-language-server",
         "docker-compose-language-service",
-        "marksman",
         "markdown-oxide",
         "shfmt",
         "debugpy",
@@ -88,7 +87,9 @@ return {
         "xmlformatter",
       },
       auto_update = false,
-      run_on_start = true,
+      -- CI and offline sessions can disable background installation without
+      -- changing the normal first-run experience.
+      run_on_start = vim.env.NVIM_DISABLE_MASON_AUTO_INSTALL ~= "1",
       start_delay = 3000,
       debounce_hours = 24,
     },
@@ -245,10 +246,50 @@ return {
         end,
         desc = "Debug: Toggle UI",
       },
+      {
+        "<leader>dc",
+        function()
+          require("dap").run_to_cursor()
+        end,
+        desc = "Debug: Run to cursor",
+      },
+      {
+        "<leader>dl",
+        function()
+          require("dap").run_last()
+        end,
+        desc = "Debug: Run last",
+      },
+      {
+        "<leader>dr",
+        function()
+          require("dap").repl.toggle()
+        end,
+        desc = "Debug: Toggle REPL",
+      },
+      {
+        "<leader>dt",
+        function()
+          require("dap").terminate()
+        end,
+        desc = "Debug: Terminate",
+      },
+      {
+        "<leader>de",
+        function()
+          require("dapui").eval()
+        end,
+        mode = { "n", "v" },
+        desc = "Debug: Evaluate expression",
+      },
     },
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "nvim-neotest/nvim-nio",
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        opts = {},
+      },
     },
     config = function()
       require "configs.dap"
@@ -295,6 +336,13 @@ return {
         end,
         desc = "Test: Output",
       },
+      {
+        "<leader>td",
+        function()
+          require("neotest").run.run { strategy = "dap" }
+        end,
+        desc = "Test: Debug nearest",
+      },
     },
     dependencies = {
       "nvim-neotest/nvim-nio",
@@ -312,5 +360,175 @@ return {
     config = function()
       require "configs.neotest"
     end,
+  },
+
+  {
+    "leoluz/nvim-dap-go",
+    ft = "go",
+    dependencies = { "mfussenegger/nvim-dap" },
+    config = function()
+      require("dap-go").setup()
+    end,
+  },
+
+  -- DIAGNOSTICS AND CODE NAVIGATION
+  {
+    "folke/trouble.nvim",
+    cmd = "Trouble",
+    opts = { focus = true },
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics: Workspace" },
+      { "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Diagnostics: Buffer" },
+      { "<leader>xs", "<cmd>Trouble symbols toggle focus=false<cr>", desc = "Symbols: Trouble" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Diagnostics: Quickfix" },
+    },
+  },
+
+  {
+    "stevearc/aerial.nvim",
+    cmd = { "AerialOpen", "AerialToggle", "AerialNavToggle" },
+    opts = {
+      backends = { "lsp", "treesitter", "markdown", "man" },
+      layout = { default_direction = "prefer_right", min_width = 30 },
+      show_guides = true,
+    },
+    keys = {
+      { "<leader>cs", "<cmd>AerialToggle!<cr>", desc = "Symbols: Outline" },
+      { "[s", "<cmd>AerialPrev<cr>", desc = "Symbols: Previous" },
+      { "]s", "<cmd>AerialNext<cr>", desc = "Symbols: Next" },
+    },
+  },
+
+  {
+    "nvim-treesitter/nvim-treesitter-context",
+    event = "VeryLazy",
+    opts = { max_lines = 3 },
+    keys = {
+      { "<leader>uc", "<cmd>TSContext toggle<cr>", desc = "UI: Toggle code context" },
+    },
+  },
+
+  {
+    "j-hui/fidget.nvim",
+    event = "LspAttach",
+    opts = {
+      notification = { window = { winblend = 0 } },
+    },
+  },
+
+  -- PROJECT SEARCH, TASKS, AND SESSIONS
+  {
+    "nvim-pack/nvim-spectre",
+    cmd = "Spectre",
+    opts = {},
+    keys = {
+      { "<leader>sr", "<cmd>Spectre<cr>", desc = "Search: Replace in project" },
+      {
+        "<leader>sw",
+        function()
+          require("spectre").open_visual { select_word = true }
+        end,
+        desc = "Search: Replace current word",
+      },
+      {
+        "<leader>sw",
+        function()
+          require("spectre").open_visual()
+        end,
+        mode = "v",
+        desc = "Search: Replace selection",
+      },
+    },
+  },
+
+  {
+    "stevearc/overseer.nvim",
+    cmd = { "OverseerRun", "OverseerToggle", "OverseerQuickAction", "OverseerTaskAction" },
+    opts = {
+      task_list = { direction = "bottom", min_height = 15, max_height = 25 },
+    },
+    keys = {
+      { "<leader>rr", "<cmd>OverseerRun<cr>", desc = "Tasks: Run" },
+      { "<leader>rt", "<cmd>OverseerToggle<cr>", desc = "Tasks: Toggle list" },
+      { "<leader>ra", "<cmd>OverseerTaskAction<cr>", desc = "Tasks: Action" },
+    },
+  },
+
+  {
+    "folke/persistence.nvim",
+    event = "BufReadPre",
+    opts = {},
+    keys = {
+      {
+        "<leader>qs",
+        function()
+          require("persistence").select()
+        end,
+        desc = "Session: Select",
+      },
+      {
+        "<leader>ql",
+        function()
+          require("persistence").load { last = true }
+        end,
+        desc = "Session: Restore last",
+      },
+      {
+        "<leader>qd",
+        function()
+          require("persistence").stop()
+        end,
+        desc = "Session: Do not save",
+      },
+    },
+  },
+
+  -- GIT WORKFLOW
+  {
+    "NeogitOrg/neogit",
+    cmd = "Neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    opts = { kind = "split" },
+    keys = {
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "Git: Status" },
+      { "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Git: Commit" },
+    },
+  },
+
+  {
+    "sindrets/diffview.nvim",
+    cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
+    keys = {
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Git: Diff view" },
+      { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "Git: File history" },
+    },
+  },
+
+  {
+    "folke/todo-comments.nvim",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+    keys = {
+      { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "Search: TODO comments" },
+      {
+        "]t",
+        function()
+          require("todo-comments").jump_next()
+        end,
+        desc = "TODO: Next",
+      },
+      {
+        "[t",
+        function()
+          require("todo-comments").jump_prev()
+        end,
+        desc = "TODO: Previous",
+      },
+    },
   },
 }

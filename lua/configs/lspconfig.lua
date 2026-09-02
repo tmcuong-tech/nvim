@@ -59,10 +59,7 @@ local servers = {
   -- C#
   "omnisharp",
 
-  -- MARKDOWN
-  "marksman",
-
-  -- Markdown
+  -- MARKDOWN (use one server to avoid duplicate diagnostics/completion)
   "markdown_oxide",
 
   -- AUTOTOOLS

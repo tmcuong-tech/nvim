@@ -3,12 +3,17 @@ local dapui = require "dapui"
 
 dapui.setup()
 
+local function executable(name)
+  local path = vim.fn.exepath(name)
+  return path ~= "" and path or name
+end
+
 -- C / C++ / Rust - CodeLLDB
 -- Register adapters before Mason finishes so they work immediately after install.
 dap.adapters.codelldb = {
   type = "server",
   port = "${port}",
-  executable = { command = "codelldb", args = { "--port", "${port}" } },
+  executable = { command = executable "codelldb", args = { "--port", "${port}" } },
 }
 
 local codelldb_config = {
@@ -31,7 +36,7 @@ dap.configurations.cpp = codelldb_config
 dap.configurations.rust = codelldb_config
 
 -- Python - debugpy
-dap.adapters.python = { type = "executable", command = "debugpy-adapter" }
+dap.adapters.python = { type = "executable", command = executable "debugpy-adapter" }
 
 dap.configurations.python = {
   {
@@ -50,30 +55,12 @@ dap.configurations.python = {
   },
 }
 
--- Go - Delve
-dap.adapters.go = function(callback)
-  local server = vim.uv.new_tcp()
-  server:bind("127.0.0.1", 0)
-  local port = server:getsockname().port
-  server:close()
-  vim.system({ "dlv", "dap", "--listen", ("127.0.0.1:%d"):format(port) }, { detach = true })
-  vim.defer_fn(function()
-    callback { type = "server", host = "127.0.0.1", port = port }
-  end, 100)
-end
-
-dap.configurations.go = {
-  { type = "go", name = "Debug file", request = "launch", program = "${file}" },
-  { type = "go", name = "Debug package", request = "launch", program = "${fileDirname}" },
-  { type = "go", name = "Debug tests", request = "launch", mode = "test", program = "${fileDirname}" },
-}
-
 -- JavaScript / TypeScript - vscode-js-debug
 dap.adapters["pwa-node"] = {
   type = "server",
   host = "127.0.0.1",
   port = "${port}",
-  executable = { command = "js-debug-adapter", args = { "${port}" } },
+  executable = { command = executable "js-debug-adapter", args = { "${port}" } },
 }
 
 local js_config = {
@@ -100,7 +87,7 @@ for _, filetype in ipairs { "javascript", "javascriptreact", "typescript", "type
 end
 
 -- PHP - Xdebug
-dap.adapters.php = { type = "executable", command = "php-debug-adapter" }
+dap.adapters.php = { type = "executable", command = executable "php-debug-adapter" }
 dap.configurations.php = {
   { type = "php", request = "launch", name = "Listen for Xdebug", port = 9003 },
   { type = "php", request = "launch", name = "Launch current file", program = "${file}", cwd = "${fileDirname}" },
@@ -109,7 +96,7 @@ dap.configurations.php = {
 -- C# - netcoredbg
 dap.adapters.coreclr = {
   type = "executable",
-  command = "netcoredbg",
+  command = executable "netcoredbg",
   args = { "--interpreter=vscode" },
 }
 dap.configurations.cs = {
@@ -124,7 +111,7 @@ dap.configurations.cs = {
 }
 
 -- Bash - bash-debug-adapter
-dap.adapters.bashdb = { type = "executable", command = "bash-debug-adapter" }
+dap.adapters.bashdb = { type = "executable", command = executable "bash-debug-adapter" }
 dap.configurations.sh = {
   { type = "bashdb", request = "launch", name = "Launch file", program = "${file}", cwd = "${fileDirname}" },
 }
@@ -148,34 +135,3 @@ end
 dap.listeners.before.event_exited.dapui_config = function()
   dapui.close()
 end
-
--- Keymaps
-vim.keymap.set("n", "<F5>", dap.continue, {
-  desc = "Debug: Continue",
-})
-
-vim.keymap.set("n", "<F10>", dap.step_over, {
-  desc = "Debug: Step Over",
-})
-
-vim.keymap.set("n", "<F11>", dap.step_into, {
-  desc = "Debug: Step Into",
-})
-
-vim.keymap.set("n", "<F12>", dap.step_out, {
-  desc = "Debug: Step Out",
-})
-
-vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, {
-  desc = "Debug: Toggle Breakpoint",
-})
-
-vim.keymap.set("n", "<leader>dB", function()
-  dap.set_breakpoint(vim.fn.input "Breakpoint condition: ")
-end, {
-  desc = "Debug: Conditional Breakpoint",
-})
-
-vim.keymap.set("n", "<leader>du", dapui.toggle, {
-  desc = "Debug: Toggle UI",
-})
