@@ -62,10 +62,12 @@ local groups = {
   },
 }
 
-function M.check()
+local order = { "LSP", "Formatter", "Linter", "Debugger" }
+
+local function status_lines()
   local lines = { "NvChad environment" }
 
-  for _, group in ipairs { "LSP", "Formatter", "Linter", "Debugger" } do
+  for _, group in ipairs(order) do
     local executables = groups[group]
     table.insert(lines, "\n" .. group .. ":")
     for _, executable in ipairs(executables) do
@@ -75,10 +77,38 @@ function M.check()
   end
 
   table.insert(lines, "\nMissing tools are optional and can be installed with :Mason.")
+  return lines
+end
+
+-- Entry point discovered by :checkhealth configs.
+function M.check()
+  vim.health.start "External development tools"
+
+  for _, group in ipairs(order) do
+    local missing = {}
+    for _, executable in ipairs(groups[group]) do
+      if vim.fn.executable(executable) == 0 then
+        table.insert(missing, executable)
+      end
+    end
+
+    if #missing == 0 then
+      vim.health.ok(group .. ": all configured tools are available")
+    else
+      vim.health.warn(group .. ": missing " .. table.concat(missing, ", "), {
+        "Open :Mason and wait for pending installations to finish.",
+        "Install the matching language runtime when Mason reports a runtime dependency.",
+      })
+    end
+  end
+end
+
+function M.show()
+  local lines = status_lines()
   vim.notify(table.concat(lines, "\n"), vim.log.levels.INFO, { title = "Config health" })
 end
 
-vim.api.nvim_create_user_command("ConfigHealth", M.check, {
+vim.api.nvim_create_user_command("ConfigHealth", M.show, {
   desc = "Check external tools used by this configuration",
 })
 
