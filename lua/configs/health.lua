@@ -35,9 +35,31 @@ local groups = {
     "yamlfmt",
     "asmfmt",
     "cmake-format",
+    "php-cs-fixer",
+    "csharpier",
+    "sqlfluff",
+    "xmlformat",
   },
-  Linter = { "ruff", "cpplint", "cmakelint", "yamllint", "markdownlint" },
-  Debugger = { "codelldb", "debugpy-adapter" },
+  Linter = {
+    "ruff",
+    "eslint_d",
+    "cpplint",
+    "cmakelint",
+    "yamllint",
+    "markdownlint",
+    "shellcheck",
+    "hadolint",
+    "sqlfluff",
+  },
+  Debugger = {
+    "codelldb",
+    "debugpy-adapter",
+    "dlv",
+    "js-debug-adapter",
+    "php-debug-adapter",
+    "netcoredbg",
+    "bash-debug-adapter",
+  },
 }
 
 function M.check()

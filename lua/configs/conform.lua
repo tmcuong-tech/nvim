@@ -10,6 +10,8 @@ local options = {
     go = { "gofmt" },
 
     java = { "google-java-format" },
+    php = { "php_cs_fixer" },
+    cs = { "csharpier" },
 
     javascript = { "prettier" },
     javascriptreact = { "prettier" },
@@ -33,6 +35,8 @@ local options = {
     markdown = { "prettier" },
 
     cmake = { "cmake_format" },
+    sql = { "sqlfluff" },
+    xml = { "xmlformatter" },
   },
 
   -- Auto format trước khi :w

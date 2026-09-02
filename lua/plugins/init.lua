@@ -1,8 +1,18 @@
-return {
-  -- =========================================================
-  -- FORMATTER
-  -- =========================================================
+-- Author:
+--    
+--     ████████╗███╗   ███╗ ██████╗██╗   ██╗ ██████╗ ███╗   ██╗ ██████╗ 
+--     ╚══██╔══╝████╗ ████║██╔════╝██║   ██║██╔═══██╗████╗  ██║██╔════╝ 
+--        ██║   ██╔████╔██║██║     ██║   ██║██║   ██║██╔██╗ ██║██║  ███╗
+--        ██║   ██║╚██╔╝██║██║     ██║   ██║██║   ██║██║╚██╗██║██║   ██║
+--        ██║   ██║ ╚═╝ ██║╚██████╗╚██████╔╝╚██████╔╝██║ ╚████║╚██████╔╝
+--        ╚═╝   ╚═╝     ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝ 
+--
+--
+-- github.com/tmcuong-tech
+--
 
+return {
+  -- FORMATTER
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
@@ -62,6 +72,20 @@ return {
         "cpplint",
         "cmakelint",
         "markdownlint",
+        "eslint_d",
+        "shellcheck",
+        "hadolint",
+        "sqlfluff",
+        "delve",
+        "js-debug-adapter",
+        "netcoredbg",
+        "php-debug-adapter",
+        "bash-debug-adapter",
+        "java-debug-adapter",
+        "java-test",
+        "php-cs-fixer",
+        "csharpier",
+        "xmlformatter",
       },
       auto_update = false,
       run_on_start = true,
@@ -70,10 +94,7 @@ return {
     },
   },
 
-  -- =========================================================
   -- LSP
-  -- =========================================================
-
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -81,18 +102,17 @@ return {
     end,
   },
 
-  -- =========================================================
-  -- COMPLETION
-  -- =========================================================
+  {
+    "mfussenegger/nvim-jdtls",
+    ft = "java",
+  },
 
+  -- COMPLETION
   {
     import = "nvchad.blink.lazyspec",
   },
 
-  -- =========================================================
   -- TREESITTER
-  -- =========================================================
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -163,9 +183,7 @@ return {
     },
   },
 
-  -- =========================================================
   -- LINTING
-  -- =========================================================
   {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
@@ -174,9 +192,7 @@ return {
     end,
   },
 
-  -- ========================================================
   -- DAP DEBUGING
-  -- ========================================================
   {
     "mfussenegger/nvim-dap",
     keys = {
@@ -239,9 +255,7 @@ return {
     end,
   },
 
-  -- =======================================================
   -- TESTING
-  -- =======================================================
   {
     "nvim-neotest/neotest",
     cmd = "Neotest",
@@ -290,6 +304,9 @@ return {
       "nvim-neotest/neotest-python",
       "fredrikaverpil/neotest-golang",
       "rcasia/neotest-java",
+      "nvim-neotest/neotest-jest",
+      "marilari88/neotest-vitest",
+      "rouge8/neotest-rust",
     },
 
     config = function()

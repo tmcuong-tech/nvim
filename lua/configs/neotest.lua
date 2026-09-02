@@ -14,6 +14,15 @@ if vim.fn.executable "java" == 1 then
   table.insert(adapters, require "neotest-java")
 end
 
+if vim.fn.executable "node" == 1 then
+  table.insert(adapters, require "neotest-jest")
+  table.insert(adapters, require "neotest-vitest")
+end
+
+if vim.fn.executable "cargo" == 1 then
+  table.insert(adapters, require "neotest-rust")
+end
+
 neotest.setup {
   adapters = adapters,
 }

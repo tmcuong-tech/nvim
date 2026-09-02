@@ -15,6 +15,7 @@ lazy.load {
     "mason-tool-installer.nvim",
     "nvim-dap",
     "nvim-dap-ui",
+    "nvim-jdtls",
     "nvim-lint",
     "neotest",
   },
@@ -24,6 +25,11 @@ vim.wait(1000)
 
 for _, module in ipairs { "conform", "dap", "dapui", "lint", "neotest" } do
   assert(pcall(require, module), ("module %s did not load"):format(module))
+end
+
+local dap = require "dap"
+for _, filetype in ipairs { "c", "cpp", "rust", "python", "go", "javascript", "typescript", "php", "cs", "bash" } do
+  assert(dap.configurations[filetype], ("DAP has no configuration for %s"):format(filetype))
 end
 
 assert(vim.fn.exists ":ConfigHealth" == 2, ":ConfigHealth was not registered")

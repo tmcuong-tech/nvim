@@ -48,6 +48,25 @@ or .NET.
 Format-on-save uses an installed formatter first and falls back to LSP. Missing
 optional executables never prevent Neovim from starting.
 
+## Language coverage
+
+| Language | LSP | Format/Lint | Debug | Test |
+| --- | --- | --- | --- | --- |
+| C / C++ | clangd | clang-format / cpplint | CodeLLDB | — |
+| Rust | rust-analyzer | rustfmt | CodeLLDB | cargo/neotest |
+| Python | pyright | Ruff | debugpy | pytest/neotest |
+| Go | gopls | gofmt | Delve | go test/neotest |
+| Java | jdtls | google-java-format | java-debug | JUnit/neotest |
+| JavaScript / TypeScript | ts_ls | Prettier / ESLint | vscode-js-debug | Jest/Vitest |
+| Bash | bashls | shfmt / ShellCheck | bash-debug | — |
+| PHP | intelephense | php-cs-fixer | Xdebug | — |
+| C# | OmniSharp | CSharpier | netcoredbg | — |
+| Lua | lua_ls | Stylua | — | — |
+| SQL / JSON / YAML / XML / Docker / CMake / Markdown | dedicated LSP | formatter/linter where available | — | — |
+
+Data and markup languages intentionally do not register DAP adapters because
+they have no executable runtime to debug.
+
 ## Validation
 
 Run the reproducible headless smoke test from the configuration directory:
