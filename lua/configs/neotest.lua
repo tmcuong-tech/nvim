@@ -14,9 +14,9 @@ if vim.fn.executable "java" == 1 then
   table.insert(adapters, require "neotest-java")
 end
 
-neotest.setup({
+neotest.setup {
   adapters = adapters,
-})
+}
 
 -- Run nearest test
 vim.keymap.set("n", "<leader>tt", function()
@@ -27,7 +27,7 @@ end, {
 
 -- Run entire file
 vim.keymap.set("n", "<leader>tf", function()
-  neotest.run.run(vim.fn.expand("%"))
+  neotest.run.run(vim.fn.expand "%")
 end, {
   desc = "Test: Run file",
 })
@@ -48,9 +48,9 @@ end, {
 
 -- Open test output
 vim.keymap.set("n", "<leader>to", function()
-  neotest.output.open({
+  neotest.output.open {
     enter = true,
-  })
+  }
 end, {
   desc = "Test: Output",
 })

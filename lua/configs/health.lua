@@ -7,15 +7,44 @@ local groups = {
     "pyright-langserver",
     "typescript-language-server",
     "bash-language-server",
+    "rust-analyzer",
+    "gopls",
+    "jdtls",
+    "intelephense",
+    "sql-language-server",
+    "vscode-json-language-server",
+    "yaml-language-server",
+    "docker-langserver",
+    "docker-compose-langserver",
+    "lemminx",
+    "cmake-language-server",
+    "OmniSharp",
+    "marksman",
+    "markdown-oxide",
+    "autotools-language-server",
   },
-  Formatter = { "stylua", "clang-format", "ruff", "prettier", "shfmt" },
+  Formatter = {
+    "stylua",
+    "clang-format",
+    "ruff",
+    "prettier",
+    "shfmt",
+    "rustfmt",
+    "gofmt",
+    "google-java-format",
+    "yamlfmt",
+    "asmfmt",
+    "cmake-format",
+  },
+  Linter = { "ruff", "cpplint", "cmakelint", "yamllint", "markdownlint" },
   Debugger = { "codelldb", "debugpy-adapter" },
 }
 
 function M.check()
   local lines = { "NvChad environment" }
 
-  for group, executables in pairs(groups) do
+  for _, group in ipairs { "LSP", "Formatter", "Linter", "Debugger" } do
+    local executables = groups[group]
     table.insert(lines, "\n" .. group .. ":")
     for _, executable in ipairs(executables) do
       local installed = vim.fn.executable(executable) == 1

@@ -6,7 +6,7 @@ return {
   {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
-    opts = require("configs.conform"),
+    opts = require "configs.conform",
   },
 
   {
@@ -22,11 +22,13 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     event = "VeryLazy",
     opts = {
-      -- Cross-platform tools only. Install ecosystem-specific tools with
-      -- :Mason to avoid downloading large runtimes a machine does not use.
+      -- Keep every configured server/tool declared here so a fresh machine
+      -- converges to the same environment. Language runtimes remain external.
       ensure_installed = {
         "lua-language-server",
         "stylua",
+        "html-lsp",
+        "css-lsp",
         "bash-language-server",
         "clangd",
         "clang-format",
@@ -39,9 +41,27 @@ return {
         "dockerfile-language-server",
         "docker-compose-language-service",
         "marksman",
+        "markdown-oxide",
         "shfmt",
         "debugpy",
         "codelldb",
+        "gopls",
+        "rust-analyzer",
+        "jdtls",
+        "google-java-format",
+        "intelephense",
+        "sqlls",
+        "lemminx",
+        "cmake-language-server",
+        "cmakelang",
+        "omnisharp",
+        "autotools-language-server",
+        "yamlfmt",
+        "yamllint",
+        "asmfmt",
+        "cpplint",
+        "cmakelint",
+        "markdownlint",
       },
       auto_update = false,
       run_on_start = true,
@@ -57,7 +77,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     config = function()
-      require("configs.lspconfig")
+      require "configs.lspconfig"
     end,
   },
 
@@ -150,7 +170,7 @@ return {
     "mfussenegger/nvim-lint",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
-      require("configs.lint")
+      require "configs.lint"
     end,
   },
 
@@ -160,15 +180,62 @@ return {
   {
     "mfussenegger/nvim-dap",
     keys = {
-      { "<F5>", function() require("dap").continue() end, desc = "Debug: Continue" },
-      { "<leader>du", function() require("dapui").toggle() end, desc = "Debug: Toggle UI" },
+      {
+        "<F5>",
+        function()
+          require("dap").continue()
+        end,
+        desc = "Debug: Continue",
+      },
+      {
+        "<F10>",
+        function()
+          require("dap").step_over()
+        end,
+        desc = "Debug: Step Over",
+      },
+      {
+        "<F11>",
+        function()
+          require("dap").step_into()
+        end,
+        desc = "Debug: Step Into",
+      },
+      {
+        "<F12>",
+        function()
+          require("dap").step_out()
+        end,
+        desc = "Debug: Step Out",
+      },
+      {
+        "<leader>db",
+        function()
+          require("dap").toggle_breakpoint()
+        end,
+        desc = "Debug: Toggle Breakpoint",
+      },
+      {
+        "<leader>dB",
+        function()
+          require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
+        end,
+        desc = "Debug: Conditional Breakpoint",
+      },
+      {
+        "<leader>du",
+        function()
+          require("dapui").toggle()
+        end,
+        desc = "Debug: Toggle UI",
+      },
     },
     dependencies = {
       "rcarriga/nvim-dap-ui",
       "nvim-neotest/nvim-nio",
     },
     config = function()
-      require("configs.dap")
+      require "configs.dap"
     end,
   },
 
@@ -179,9 +246,41 @@ return {
     "nvim-neotest/neotest",
     cmd = "Neotest",
     keys = {
-      { "<leader>tt", function() require("neotest").run.run() end, desc = "Test: Run nearest" },
-      { "<leader>tf", function() require("neotest").run.run(vim.fn.expand "%") end, desc = "Test: Run file" },
-      { "<leader>ts", function() require("neotest").summary.toggle() end, desc = "Test: Summary" },
+      {
+        "<leader>tt",
+        function()
+          require("neotest").run.run()
+        end,
+        desc = "Test: Run nearest",
+      },
+      {
+        "<leader>tf",
+        function()
+          require("neotest").run.run(vim.fn.expand "%")
+        end,
+        desc = "Test: Run file",
+      },
+      {
+        "<leader>tS",
+        function()
+          require("neotest").run.stop()
+        end,
+        desc = "Test: Stop",
+      },
+      {
+        "<leader>ts",
+        function()
+          require("neotest").summary.toggle()
+        end,
+        desc = "Test: Summary",
+      },
+      {
+        "<leader>to",
+        function()
+          require("neotest").output.open { enter = true }
+        end,
+        desc = "Test: Output",
+      },
     },
     dependencies = {
       "nvim-neotest/nvim-nio",
@@ -194,7 +293,7 @@ return {
     },
 
     config = function()
-      require("configs.neotest")
+      require "configs.neotest"
     end,
   },
 }

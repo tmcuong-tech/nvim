@@ -20,12 +20,17 @@ configuration directory for your operating system:
 - Windows: `%LOCALAPPDATA%\nvim`
 
 Start `nvim`. lazy.nvim bootstraps itself and installs plugins. Mason then
-installs the portable core language tools in the background. Run `:Mason` to
-install optional ecosystem-specific tools and `:checkhealth` to diagnose the
-host machine. `:ConfigHealth` prints a concise status of tools used most often.
+installs all declared language tools in the background. Run `:Mason` to inspect
+installation progress and `:checkhealth` to diagnose the host machine.
+`:ConfigHealth` prints a concise status of every configured external tool.
 
 The first launch requires an internet connection. Plugin versions are pinned in
 `lazy-lock.json`; use `:Lazy update` intentionally when upgrading.
+
+Mason installs tools asynchronously. DAP adapters are registered in advance,
+so newly installed debuggers can be used without restarting Neovim. Some tools
+still require their language runtime, such as Java, Node.js, Python, Go, Rust,
+or .NET.
 
 ## Main keymaps
 
@@ -42,3 +47,11 @@ The first launch requires an internet connection. Plugin versions are pinned in
 
 Format-on-save uses an installed formatter first and falls back to LSP. Missing
 optional executables never prevent Neovim from starting.
+
+## Validation
+
+Run the reproducible headless smoke test from the configuration directory:
+
+```sh
+nvim --headless -l scripts/smoke.lua
+```

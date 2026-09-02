@@ -7,13 +7,12 @@ dapui.setup()
 -- C / C++ / Rust - CodeLLDB
 -- ========================================
 
-if vim.fn.executable "codelldb" == 1 then
-  dap.adapters.codelldb = {
-    type = "server",
-    port = "${port}",
-    executable = { command = "codelldb", args = { "--port", "${port}" } },
-  }
-end
+-- Register adapters before Mason finishes so they work immediately after install.
+dap.adapters.codelldb = {
+  type = "server",
+  port = "${port}",
+  executable = { command = "codelldb", args = { "--port", "${port}" } },
+}
 
 local codelldb_config = {
   {
@@ -22,11 +21,7 @@ local codelldb_config = {
     request = "launch",
 
     program = function()
-      return vim.fn.input(
-        "Path to executable: ",
-        vim.fn.getcwd() .. "/",
-        "file"
-      )
+      return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
     end,
 
     cwd = "${workspaceFolder}",
@@ -34,23 +29,17 @@ local codelldb_config = {
   },
 }
 
-if dap.adapters.codelldb then
-  dap.configurations.c = codelldb_config
-  dap.configurations.cpp = codelldb_config
-  dap.configurations.rust = codelldb_config
-end
-
+dap.configurations.c = codelldb_config
+dap.configurations.cpp = codelldb_config
+dap.configurations.rust = codelldb_config
 
 -- ========================================
 -- Python - debugpy
 -- ========================================
 
-if vim.fn.executable "debugpy-adapter" == 1 then
-  dap.adapters.python = { type = "executable", command = "debugpy-adapter" }
-end
+dap.adapters.python = { type = "executable", command = "debugpy-adapter" }
 
-if dap.adapters.python then
-  dap.configurations.python = {
+dap.configurations.python = {
   {
     type = "python",
     request = "launch",
@@ -59,14 +48,13 @@ if dap.adapters.python then
     program = "${file}",
 
     pythonPath = function()
-      return vim.fn.exepath("python")
+      local python = vim.fn.exepath "python3"
+      return python ~= "" and python or vim.fn.exepath "python"
     end,
 
     console = "integratedTerminal",
   },
-  }
-end
-
+}
 
 -- ========================================
 -- DAP UI
@@ -87,7 +75,6 @@ end
 dap.listeners.before.event_exited.dapui_config = function()
   dapui.close()
 end
-
 
 -- ========================================
 -- Keymaps
@@ -114,9 +101,7 @@ vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, {
 })
 
 vim.keymap.set("n", "<leader>dB", function()
-  dap.set_breakpoint(
-    vim.fn.input("Breakpoint condition: ")
-  )
+  dap.set_breakpoint(vim.fn.input "Breakpoint condition: ")
 end, {
   desc = "Debug: Conditional Breakpoint",
 })
