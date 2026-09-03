@@ -31,11 +31,27 @@ let g:fzf_colors = {
 "    \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always --theme=TwoDark --style=header,numbers,snip --line-range :300 {}']}, <bang>0)
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+nnoremap <silent> <F6> :Files<CR>
 
-" :Rg
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --color=always --smart-case -- '.shellescape(<q-args>), 1, {'options': ['--exact', '--layout=reverse']}, <bang>0)
+" :Rg. Keep startup functional when ripgrep is not installed.
+function! s:RunRg(query, fullscreen) abort
+  if !executable('rg')
+    echohl WarningMsg
+    echom 'The :Rg command requires ripgrep (rg).'
+    echohl None
+    return
+  endif
+  call fzf#vim#grep(
+        \ 'rg --column --line-number --color=always --smart-case -- ' . shellescape(a:query),
+        \ 1,
+        \ {'options': ['--exact', '--layout=reverse']},
+        \ a:fullscreen)
+endfunction
+command! -bang -nargs=* Rg call <SID>RunRg(<q-args>, <bang>0)
+nnoremap <silent> <F7> :Rg<CR>
 
-" Ignore some file 
-let $FZF_DEFAULT_COMMAND='find . \( -name __pycache__ -o -name .git -name .vagrant \) -prune -o -print'
+" Cross-platform file source. Without rg, fzf.vim uses its built-in fallback.
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --glob !.git/** --glob !plugged/** --glob !**/__pycache__/** --glob !.vagrant/**'
+  let $FZF_CTRL_T_COMMAND = $FZF_DEFAULT_COMMAND
+endif
