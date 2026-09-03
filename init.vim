@@ -10,7 +10,8 @@
 lua print('Neovim started...')
 
 " => General settings
-set number		    " Show line number
+set number                  " Show line number
+set relativenumber          " Show relative line
 set mouse=a                 " Enable mouse
 set expandtab               " Tab setting 
 set tabstop=4               " Tab setting 
