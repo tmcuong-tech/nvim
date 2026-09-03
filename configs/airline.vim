@@ -8,8 +8,6 @@ let g:airline#extensions#tabline#formatter = 'default'
 let g:airline#extensions#tabline#fnamemod = ':t'        " Set Tab name as file name
 let g:airline#extensions#branch#enabled = 1
 let g:airline#extensions#hunks#enabled = 1
-let g:airline#extensions#coc#enabled = 1
-
 let g:airline#extensions#whitespace#enabled = 0         " Remove warning whitespace"
 
 if !exists('g:airline_symbols')

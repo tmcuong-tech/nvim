@@ -4,7 +4,7 @@ nnoremap <silent> <F5> :NERDTreeToggle<CR>
 " Open the existing NERDTree on each new tab.
 "autocmd BufWinEnter * silent NERDTreeMirror
 
-" Keep project-root detection stable for Coc, FZF and terminals.
+" Keep project-root detection stable for LSP, FZF and terminals.
 let g:NERDTreeChDirMode = 0
 
 " Change arrow to expand/collapse tree

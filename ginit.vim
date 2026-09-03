@@ -21,8 +21,8 @@ if exists('+guitablabel')
   set guitablabel=\[%N\]\ %t\ %M
 endif
 
-" Set font
-set guifont=DejaVuSansM\ Nerd\ Font\ Mono
+" Neovim-Qt font. Spaces must be escaped in a Vim option value.
+set guifont=JetBrainsMono\ Nerd\ Font:h12
 
 " Set key map to paste 
 inoremap <silent> <S-Insert> <C-R>+
