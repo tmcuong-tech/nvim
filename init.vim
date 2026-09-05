@@ -211,8 +211,31 @@ augroup END
 
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
-" Close buffer without exiting Neovim
-nnoremap <silent> <leader>bd :bp \| sp \| bn \| bd<CR>
+" Close the current file without exiting Neovim.  When it is the last listed
+" buffer, leave an empty buffer behind.  Unsaved changes still require :q!.
+function! s:CloseCurrentBuffer(force) abort
+  let l:current_buffer = bufnr('%')
+  if &modified && !a:force
+    echohl ErrorMsg
+    echom 'No write since last change (add ! to override)'
+    echohl None
+    return
+  endif
+
+  let l:other_buffers = filter(getbufinfo({'buflisted': 1}),
+        \ { _, buffer -> buffer.bufnr != l:current_buffer })
+  if empty(l:other_buffers)
+    enew
+  else
+    execute 'buffer' . (a:force ? '! ' : ' ') . l:other_buffers[-1].bufnr
+  endif
+  execute 'bdelete' . (a:force ? '! ' : ' ') . l:current_buffer
+endfunction
+
+command! -bang CloseBuffer call <SID>CloseCurrentBuffer(<bang>0)
+cnoreabbrev <expr> q getcmdtype() ==# ':' && getcmdline() ==# 'q'
+      \ ? 'CloseBuffer' : 'q'
+nnoremap <silent> <leader>bd :CloseBuffer<CR>
 
 " Clear search highlight (and redraw) with Esc, since 'hlsearch' keeps
 " matches highlighted after a / or ? search until :nohlsearch is called.
