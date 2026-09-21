@@ -66,14 +66,6 @@ return {
         function()
           Snacks.terminal()
         end,
-        desc = "Terminal",
-      },
-
-      {
-        "<A-t>",
-        function()
-          Snacks.terminal()
-        end,
         desc = "Floating Terminal",
       },
 
@@ -180,21 +172,22 @@ return {
         end,
         desc = "Git Blame Line",
       },
-    },
 
-    init = function()
-      vim.api.nvim_create_autocmd("User", {
-        pattern = "VeryLazy",
-        callback = function()
-          vim.keymap.set("n", "<leader>.", function()
-            Snacks.scratch()
-          end, { desc = "Scratch Buffer" })
-
-          vim.keymap.set("n", "<leader>S", function()
-            Snacks.scratch.select()
-          end, { desc = "Select Scratch Buffer" })
+      {
+        "<leader>.",
+        function()
+          Snacks.scratch()
         end,
-      })
-    end,
+        desc = "Scratch Buffer",
+      },
+
+      {
+        "<leader>S",
+        function()
+          Snacks.scratch.select()
+        end,
+        desc = "Select Scratch Buffer",
+      },
+    },
   },
 }
