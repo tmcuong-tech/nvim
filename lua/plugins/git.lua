@@ -1,11 +1,22 @@
 return {
   {
+    "samoshkin/vim-mergetool",
+    init = function()
+      vim.g.mergetool_layout = "mr"
+      vim.g.mergetool_prefer_revision = "local"
+      vim.keymap.set("n", "<leader>mt", "<Plug>(MergetoolToggle)", {
+        desc = "Git: Merge Tool Toggle",
+        silent = true,
+      })
+    end,
+  },
+  {
     "lewis6991/gitsigns.nvim",
     opts = {
       signs = {
-        add = { text = "│" },
-        change = { text = "│" },
-        delete = { text = "_" },
+        add = { text = "✚" },
+        change = { text = "✹" },
+        delete = { text = "✖" },
         topdelete = { text = "‾" },
         changedelete = { text = "~" },
       },
@@ -32,5 +43,14 @@ return {
         end, "Git: Blame Line")
       end,
     },
+  },
+  {
+    "airblade/vim-gitgutter",
+    init = function()
+      vim.g.gitgutter_sign_added = "✚"
+      vim.g.gitgutter_sign_modified = "✹"
+      vim.g.gitgutter_sign_removed = "✖"
+      vim.g.gitgutter_preview_win_floating = 1
+    end,
   },
 }
