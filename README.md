@@ -208,9 +208,19 @@ Neovim will automatically:
 | `<leader>fe` | File explorer sidebar |
 | `<leader>fz` | Jump to directory via Zoxide |
 | `<leader>fp` | Projects picker |
-| `<leader>ft` | Toggle Floating Terminal |
+| `<leader>ft` | Toggle Floating Terminal (Snacks) |
 | `<leader>uz` | Toggle Zen Mode |
 | `<leader>.` | Open scratch buffer |
+
+### 🖥️ Floaterm
+| Keybinding | Description |
+|---|---|
+| `<leader>zt` | Toggle Floaterm terminal |
+| `<leader>zo` | Create new Floaterm window |
+| `<leader>zk` | Kill active Floaterm window |
+| `<leader>zn` | Switch to next Floaterm window |
+| `<leader>zp` | Switch to previous Floaterm window |
+
 
 ### 🐛 Debugging (DAP - C/C++, Python, Java)
 | Keybinding | Description |
