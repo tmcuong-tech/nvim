@@ -23,7 +23,10 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" }
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
--- Format code thủ công với Conform (phím dự phòng bên cạnh <leader>cf của LazyVim)
+map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next File Tab (Buffer)" })
+map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous File Tab (Buffer)" })
+
+
 map("n", "<leader>fm", function()
   require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format Document" })

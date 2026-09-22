@@ -20,7 +20,6 @@ return {
           })
         end
 
-        -- Điều hướng hunk nhanh
         map("n", "]g", gs.next_hunk, "Git: Next Hunk")
         map("n", "[g", gs.prev_hunk, "Git: Previous Hunk")
 

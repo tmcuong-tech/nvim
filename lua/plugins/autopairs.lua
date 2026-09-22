@@ -1,5 +1,4 @@
 return {
-  -- Vô hiệu hóa mini.pairs mặc định của LazyVim để tránh xung đột đúp dấu ngoặc đơn
   {
     "nvim-mini/mini.pairs",
     enabled = false,

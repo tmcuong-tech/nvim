@@ -24,7 +24,6 @@ return {
         markdown = { "prettier" },
         cmake = { "cmake-format" },
       },
-      -- Để LazyVim quản lý format_on_save qua LazyVim.format (bật/tắt linh hoạt bằng <leader>uf)
     },
   },
 }

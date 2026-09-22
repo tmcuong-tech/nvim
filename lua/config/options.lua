@@ -112,7 +112,7 @@ vim.diagnostic.config({
     },
   },
   underline = true,
-  update_in_insert = true, -- Bắt và cập nhật lỗi realtime ngay trong lúc đang gõ ở Insert mode
+  update_in_insert = true, 
   severity_sort = true,
   float = {
     border = "rounded",

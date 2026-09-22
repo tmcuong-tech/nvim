@@ -208,6 +208,7 @@ Neovim will automatically:
 | `<leader>fe` | File explorer sidebar |
 | `<leader>fz` | Jump to directory via Zoxide |
 | `<leader>fp` | Projects picker |
+| `<leader>ft` | Toggle Floating Terminal |
 | `<leader>ft` | Toggle Floating Terminal (Snacks) |
 | `<leader>uz` | Toggle Zen Mode |
 | `<leader>.` | Open scratch buffer |

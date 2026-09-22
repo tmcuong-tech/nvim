@@ -72,9 +72,6 @@ return {
 
       vim.g.floaterm_giteditor = true
 
-      -- Tương thích shell đa nền tảng:
-      -- Trên Windows: ưu tiên PowerShell 7 (pwsh) nếu có, fallback sang powershell mặc định
-      -- Trên Linux: dùng $SHELL (bash, zsh, fish)
       if vim.fn.has("win32") == 1 then
         if vim.fn.executable("pwsh") == 1 then
           vim.g.floaterm_shell = "pwsh -NoLogo"

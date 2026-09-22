@@ -13,7 +13,7 @@ return {
     "folke/tokyonight.nvim",
     priority = 1000,
     opts = {
-      style = "night", -- Các tùy chọn: "night", "storm", "moon", "day"
+      style = "night", 
       transparent = false,
       styles = {
         sidebars = "dark",
@@ -27,7 +27,7 @@ return {
     "navarasu/onedark.nvim",
     priority = 1000,
     opts = {
-      style = "dark", -- Các tùy chọn: "dark", "darker", "cool", "deep", "warm", "warmer", "light"
+      style = "dark", 
       transparent = false,
     },
   },
@@ -38,7 +38,7 @@ return {
     name = "catppuccin",
     priority = 1000,
     opts = {
-      flavour = "mocha", -- Các tùy chọn: "mocha", "macchiato", "frappe", "latte"
+      flavour = "mocha", 
       transparent_background = false,
       integrations = {
         blink_cmp = true,
@@ -50,11 +50,9 @@ return {
     },
   },
 
-  -- Thiết lập colorscheme hoạt động cho LazyVim
   {
     "LazyVim/LazyVim",
     opts = {
-      -- Đổi tên theme bạn muốn dùng mặc định tại đây:
       -- "gruvbox" | "tokyonight" | "onedark" | "catppuccin" | "catppuccin-mocha" | "catppuccin-macchiato"
       colorscheme = "gruvbox",
     },

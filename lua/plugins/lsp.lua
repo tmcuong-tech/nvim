@@ -4,7 +4,7 @@ return {
     opts = {
       diagnostics = {
         underline = true,
-        update_in_insert = true, -- Hiển thị và cập nhật lỗi realtime khi đang gõ trong Insert mode
+        update_in_insert = true, 
         virtual_text = {
           spacing = 4,
           source = "if_many",
