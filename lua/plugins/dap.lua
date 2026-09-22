@@ -2,7 +2,13 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      "theHamsta/nvim-dap-virtual-text",
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        opts = {
+          commented = true,
+          virt_text_pos = "eol",
+        },
+      },
     },
     keys = {
       {
@@ -62,11 +68,5 @@ return {
         desc = "Debug: Terminate",
       },
     },
-    config = function()
-      require("nvim-dap-virtual-text").setup({
-        commented = true,
-        virt_text_pos = "eol",
-      })
-    end,
   },
 }

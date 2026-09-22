@@ -4,10 +4,10 @@ return {
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
-        c = { "clang_format" },
-        cpp = { "clang_format" },
+        c = { "clang-format" },
+        cpp = { "clang-format" },
         java = { "google-java-format" },
-        python = { "black", "isort" },
+        python = { "isort", "black" },
         cs = { "csharpier" },
         asm = { "asmfmt" },
         nasm = { "asmfmt" },
@@ -22,13 +22,9 @@ return {
         json = { "prettier" },
         yaml = { "prettier" },
         markdown = { "prettier" },
-        cmake = { "cmake_format" },
+        cmake = { "cmake-format" },
       },
-
-      format_on_save = {
-        timeout_ms = 3000,
-        lsp_fallback = true,
-      },
+      -- Để LazyVim quản lý format_on_save qua LazyVim.format (bật/tắt linh hoạt bằng <leader>uf)
     },
   },
 }

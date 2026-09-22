@@ -166,11 +166,11 @@ return {
       },
 
       {
-        "<leader>gb",
+        "<leader>gB",
         function()
           Snacks.git.blame_line()
         end,
-        desc = "Git Blame Line",
+        desc = "Git Blame Line (Snacks)",
       },
 
       {

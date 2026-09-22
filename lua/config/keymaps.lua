@@ -23,19 +23,8 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase Width" }
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous Buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 
-map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete Buffer" })
-
-map("n", "<leader>xx", vim.diagnostic.setloclist, { desc = "Diagnostics List" })
-map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
-
-map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code Action" })
-map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
-map("n", "gd", vim.lsp.buf.definition, { desc = "Go to Definition" })
-map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to Declaration" })
-map("n", "gr", vim.lsp.buf.references, { desc = "References" })
-map("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation" })
-map("n", "K", vim.lsp.buf.hover, { desc = "Hover Documentation" })
-
+-- Format code thủ công với Conform (phím dự phòng bên cạnh <leader>cf của LazyVim)
 map("n", "<leader>fm", function()
   require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "Format" })
+end, { desc = "Format Document" })
+
